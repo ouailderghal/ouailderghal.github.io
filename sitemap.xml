@@ -2,11 +2,11 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
-            <loc>https://ouailderghal.xyz/tags/debian/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/deploy-a-self-hosted-git-service/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/tags/git/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/tags/gitea/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/posts/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/tags/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
-            <loc>https://ouailderghal.xyz/categories/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url></urlset>
+            <loc>https://ouailderghal.github.io/tags/debian/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/deploy-a-self-hosted-git-service/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/tags/git/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/tags/gitea/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/posts/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/tags/</loc><lastmod>2021-10-19T00:00:00&#43;00:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>
+            <loc>https://ouailderghal.github.io/categories/</loc><changefreq>weekly</changefreq><priority>0.5</priority></url></urlset>

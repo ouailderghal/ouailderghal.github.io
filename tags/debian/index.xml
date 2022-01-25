@@ -1,0 +1,18 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Debian - Tag - Ouail Derghal</title>
+        <link>https://ouailderghal.xyz/tags/debian/</link>
+        <description>Debian - Tag - Ouail Derghal</description>
+        <generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>ouail.derghal@univ-constantine2.dz (Ouail Derghal)</managingEditor>
+            <webMaster>ouail.derghal@univ-constantine2.dz (Ouail Derghal)</webMaster><lastBuildDate>Tue, 19 Oct 2021 00:00:00 &#43;0000</lastBuildDate><atom:link href="https://ouailderghal.xyz/tags/debian/" rel="self" type="application/rss+xml" /><item>
+    <title>Deploy a self-hosted Git service</title>
+    <link>https://ouailderghal.xyz/deploy-a-self-hosted-git-service/</link>
+    <pubDate>Tue, 19 Oct 2021 00:00:00 &#43;0000</pubDate>
+    <author>Author</author>
+    <guid>https://ouailderghal.xyz/deploy-a-self-hosted-git-service/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/images/posts/002/featured.png" referrerpolicy="no-referrer">
+            </div>There are many popular online code hosting platforms that help you store and manage source code of your projects, Github and Gitlab are the most common solutions among developers. But sometimes you want to host your projects on your local server, is that possible ?
+Well, yeah! Gitlab offers a self-managed version ready to deploy, setting it up may be a complex task and requires time and experience. Gitlab is considered as a devops platform, if you don&rsquo;t need such complex solution, then Gitea is the best choice for you.]]></description>
+</item></channel>
+</rss>

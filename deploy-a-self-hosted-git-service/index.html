@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Deploy a self-hosted Git service - Ouail Derghal</title><meta name="Description" content="Ouail Derghal"><meta property="og:title" content="Deploy a self-hosted Git service" />
+<meta property="og:description" content="There are many popular online code hosting platforms that help you store and manage source code of your projects, Github and Gitlab are the most common solutions among developers. But sometimes you want to host your projects on your local server, is that possible ?
+Well, yeah! Gitlab offers a self-managed version ready to deploy, setting it up may be a complex task and requires time and experience. Gitlab is considered as a devops platform, if you don&rsquo;t need such complex solution, then Gitea is the best choice for you." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" /><meta property="og:image" content="https://ouailderghal.xyz/logo.png"/><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-19T00:00:00+00:00" />
+<meta property="article:modified_time" content="2021-10-19T00:00:00+00:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://ouailderghal.xyz/logo.png"/>
+
+<meta name="twitter:title" content="Deploy a self-hosted Git service"/>
+<meta name="twitter:description" content="There are many popular online code hosting platforms that help you store and manage source code of your projects, Github and Gitlab are the most common solutions among developers. But sometimes you want to host your projects on your local server, is that possible ?
+Well, yeah! Gitlab offers a self-managed version ready to deploy, setting it up may be a complex task and requires time and experience. Gitlab is considered as a devops platform, if you don&rsquo;t need such complex solution, then Gitea is the best choice for you."/>
+<meta name="application-name" content="LoveIt">
+<meta name="apple-mobile-web-app-title" content="LoveIt"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.8235a67a2521ef99fb1e455a5891b022af1653b4ede3cfffcac4e473beee88fbcc1a36bbb3cfdd75fd6df46732032f9d96e30adae9c88b769e1fbf7945cd27e0.css" integrity="sha512-gjWmeiUh75n7HkVaWJGwIq8WU7Tt48//ysTkc77uiPvMGja7s8/ddf1t9GcyAy&#43;dluMK2unIi3aeH795Rc0n4A=="><link rel="stylesheet" href="/css/style.min.987e36b35804ba65efbd514f2a1ca64c4253c1c7ce44375a59fbc8c42afa02ca18d65750a03fedfda77270f2a1b4b5812f33159b0c238eef38995458a87f1a7c.css" integrity="sha512-mH42s1gEumXvvVFPKhymTEJTwcfORDdaWfvIxCr6AsoY1ldQoD/t/adycPKhtLWBLzMVmwwjju84mVRYqH8afA=="><link rel="stylesheet" href="/lib/fontawesome-free/all.min.2fb31670aec534f73036a9cb759abcea54c760b750a996b3e58700804fb97271a6970f094f4dd0076fa8c4bd74d14781e9197364b531086492e3ffbe98d65dc7.css" integrity="sha512-L7MWcK7FNPcwNqnLdZq86lTHYLdQqZaz5YcAgE&#43;5cnGmlw8JT03QB2&#43;oxL100UeB6RlzZLUxCGSS4/&#43;&#43;mNZdxw=="><link rel="stylesheet" href="/lib/animate/animate.min.76826b0bfa1c53c546551c773bdf7cd7ed9a6149f77ee5955afa8b8b553eb40d8c595cecc3e3552aad4fac4345d3733e4d804ff763e7614957147d595b41692f.css" integrity="sha512-doJrC/ocU8VGVRx3O9981&#43;2aYUn3fuWVWvqLi1U&#43;tA2MWVzsw&#43;NVKq1PrENF03M&#43;TYBP92PnYUlXFH1ZW0FpLw=="><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Deploy a self-hosted Git service",
+        "inLanguage": "en-us",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/ouailderghal.xyz\/deploy-a-self-hosted-git-service\/"
+        },"genre": "posts","keywords": "Git, Gitea, Debian","wordcount":  1457 ,
+        "url": "https:\/\/ouailderghal.xyz\/deploy-a-self-hosted-git-service\/","datePublished": "2021-10-19T00:00:00+00:00","dateModified": "2021-10-19T00:00:00+00:00","publisher": {
+            "@type": "Organization",
+            "name": ""},"author": {
+                "@type": "Person",
+                "name": "Ouail Derghal"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="fixed" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('light' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'light' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Ouail Derghal">Ouail Derghal</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Ouail Derghal">Ouail Derghal</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Deploy a self-hosted Git service</h1><h2 class="single-subtitle">Example with Gitea</h2><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://dev.to/ouailderghal" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>Ouail Derghal</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-10-19">2021-10-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1457 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="/images/posts/002/featured.png"
+        data-srcset="/images/posts/002/featured.png, /images/posts/002/featured.png 1.5x, /images/posts/002/featured.png 2x"
+        data-sizes="auto"
+        alt="/images/posts/002/featured.png"
+        title="/images/posts/002/featured.png" /></div><div class="details toc" id="toc-static"  kept="true">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#setup-local-server-virtual-machine">Setup local server virtual machine</a></li>
+    <li><a href="#setup-database">Setup database</a></li>
+    <li><a href="#install-gitea-binaries">Install Gitea binaries</a></li>
+    <li><a href="#prepare-virtual-machine-for-gitea">Prepare virtual machine for Gitea</a></li>
+    <li><a href="#gitea-service">Gitea service</a></li>
+    <li><a href="#firewall-configuration">Firewall configuration</a></li>
+    <li><a href="#gitea-web-ui">Gitea web UI</a></li>
+    <li><a href="#custom-configuration">Custom configuration</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>There are many popular online code hosting platforms that help you store and manage
+source code of your projects, <a href="https://github.com" target="_blank" rel="noopener noreffer">Github</a> and <a href="https://gitlab.com" target="_blank" rel="noopener noreffer">Gitlab</a> are the
+most common solutions among developers. But sometimes you want to host your projects on your local
+server, is that possible ?</p>
+<p>Well, yeah! Gitlab offers a self-managed version ready to deploy, setting it up
+may be a complex task and requires time and experience. Gitlab is considered as a devops platform,
+if you don&rsquo;t need such complex solution, then <strong>Gitea</strong> is the best choice for you.</p>
+<p>Gitea is a cross-platform lightweight code hosting solution written in <strong>Go</strong>. The goal of this
+great product is to offer an easy, fast and painless deployment of a self-hosted Git service.</p>
+<p>In this tutorial, we will walk through the steps of Gitea deployment on a Debian server.</p>
+<h2 id="setup-local-server-virtual-machine">Setup local server virtual machine</h2>
+<p>For the purpose of this tutorial, we will be using <a href="https://www.vagrantup.com/downloads" target="_blank" rel="noopener noreffer">Vagrant</a> to
+create a Debian virtual machine that runs on <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank" rel="noopener noreffer">Virtualbox</a>
+hypervisor. Make sure that you have Virtualbox and Vagrant installed on your machine.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Create the Vagrantfile</span>
+mkdir -p ~/vagrant/debian-bullseye64
+vim ~/vagrant/debian-bullseye64/Vagrantfile
+</code></pre></td></tr></table>
+</div>
+</div><p>Here is the Vagrant configuration file to run a Debian 11 VM, with a bridged IP address :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ruby" data-lang="ruby"><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&#34;2&#34;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&#34;debian/bullseye64&#34;</span>
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="s2">&#34;public_network&#34;</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&#34;10.0.0.20&#34;</span>
+
+  <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span> <span class="s2">&#34;virtualbox&#34;</span> <span class="k">do</span> <span class="o">|</span><span class="n">vb</span><span class="o">|</span>
+    <span class="n">vb</span><span class="o">.</span><span class="n">gui</span> <span class="o">=</span> <span class="kp">false</span>
+    <span class="n">vb</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="s2">&#34;512&#34;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now you can boot up the VM :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> ~/vagrant/debian-bullseye64
+vagrant up
+</code></pre></td></tr></table>
+</div>
+</div><p>Since we&rsquo;ve set up a bridged connection, the Debian VM is accessible on the local network. To check
+if the VM responds, you can ping <code>10.0.0.20</code> <em>(the IP address may not be the same in your network,
+check your configuration and update the VM IP address to match your subnet)</em>.</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Accessing the VM<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">By default, Vagrant sets up an <strong>SSH server</strong> on the VM, you can access the shell by running <code>vagrant ssh</code>, make sure that you are on the same directory of the Vagrantfile.</div>
+        </div>
+    </div>
+<h2 id="setup-database">Setup database</h2>
+<p>Gitea requires one of the following relational databases : MySQL, PostgreSQL, MSSQL, SQLite3 or TiDB.
+In this tutorial, we are going to use <a href="https://mariadb.com/" target="_blank" rel="noopener noreffer">MariaDB</a>, the open-source equivalent
+of MySQL.</p>
+<p>To get MariaDB running on Debian VM, you need to install MariaDB server package :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Install server package</span>
+sudo apt install -y mariadb-server
+<span class="c1"># Launch the installation </span>
+mysql_secure_installation
+</code></pre></td></tr></table>
+</div>
+</div><p>After the installation is finished, you need to create a new user and database :
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Accessing MySQL prompt<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">In order to access MySQL prompt, run <code>sudo mysql</code> command. If you are asked for a password, use the
+one that you set up during MySQL secure installation.</div>
+        </div>
+    </div></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="o">`</span><span class="n">gitea</span><span class="o">`</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="s1">&#39;gitea&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="w"> </span><span class="n">identified</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;superSecReTPASSwD&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">grant</span><span class="w"> </span><span class="k">all</span><span class="w"> </span><span class="k">privileges</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="o">`</span><span class="n">gitea</span><span class="o">`</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="s1">&#39;gitea&#39;</span><span class="o">@</span><span class="s1">&#39;localhost&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="n">flush</span><span class="w"> </span><span class="k">privileges</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="install-gitea-binaries">Install Gitea binaries</h2>
+<p>At the date of this tutorial, the latest available version of Gitea is <code>1.15.4</code>, you can check
+the official <a href="https://try.gitea.io/" target="_blank" rel="noopener noreffer">Gitea website</a>. Run the following commands to download
+Gitea binary :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">wget -O gitea https://dl.gitea.io/gitea/1.15.4/gitea-1.15.4-linux-amd64
+chmod <span class="m">755</span> gitea <span class="c1"># make the binary executable</span>
+sudo mv gitea /usr/local/bin/ <span class="c1"># move binary to $PATH</span>
+which gitea <span class="c1"># check if gitea binary is available in $PATH</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now you can execute Gitea binary, a local server will be started on port <code>3000</code> and bound to
+<code>0.0.0.0</code> IP address, you can access Gitea externally from your browser by visiting
+<code>http://10.0.0.20:3000</code>. For now, we need to prepare the Debian VM for Gitea before using it.</p>
+<h2 id="prepare-virtual-machine-for-gitea">Prepare virtual machine for Gitea</h2>
+<p>To make Gitea instance work properly on your server, you need to install <strong>Git</strong> :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt install -y git
+<span class="c1"># check installed git version</span>
+git --version 
+</code></pre></td></tr></table>
+</div>
+</div><p>Create a new system user for Gitea :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo adduser <span class="se">\
+</span><span class="se"></span>   --system <span class="se">\
+</span><span class="se"></span>   --shell /bin/bash <span class="se">\
+</span><span class="se"></span>   --gecos <span class="s1">&#39;Gitea&#39;</span> <span class="se">\
+</span><span class="se"></span>   --group <span class="se">\
+</span><span class="se"></span>   --disabled-password <span class="se">\
+</span><span class="se"></span>   --home /home/git <span class="se">\
+</span><span class="se"></span>   git
+</code></pre></td></tr></table>
+</div>
+</div><p>Create folder structure for Gitea repositories and configuration files :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo mkdir -p /var/lib/gitea/<span class="o">{</span>custom,data,log<span class="o">}</span>
+sudo mkdir /etc/gitea
+</code></pre></td></tr></table>
+</div>
+</div><p>Update permissions and change ownership of Gitea directories to the previously created Git user :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo chown root:git /etc/gitea
+sudo chown -R git:git /var/lib/gitea/
+sudo chmod -R <span class="m">750</span> /var/lib/gitea/
+sudo chmod <span class="m">770</span> /etc/gitea
+</code></pre></td></tr></table>
+</div>
+</div><div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Update permissions after installation<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>You should update permissions of <code>/etc/gitea</code> after installation, it was previously set with write
+permissions so the installer can write the configuration file.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chmod <span class="m">750</span> /etc/gitea
+chmod <span class="m">640</span> /etc/gitea/app.ini
+</code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<p>Now you can run Gitea server, make sure that you have exported the Gitea working directory variable
+<em>(You can skip this step, we will later run Gitea with a Linux service)</em> :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">GITEA_WORK_DIR</span><span class="o">=</span>/var/lib/gitea/ <span class="c1"># working directory</span>
+gitea web -c /etc/gitea/app.ini <span class="c1"># launch Gitea web server</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>If you get a permission error, don&rsquo;t panic ! The explanation of this behavior is that your current
+user could not read the <code>app.ini</code> configuration file, your user should be a member of Git group.
+In my case, the current user is <code>vagrant</code> and it is not a member of Git group, adding it to that
+latter will fix the permission error.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo usermod -aG git <span class="nv">$USER</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Quit Gitea server<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">You can kill Gitea server by hitting <kbd>Control</kbd>+<kbd>c</kbd>.</div>
+        </div>
+    </div>
+<h2 id="gitea-service">Gitea service</h2>
+<p>Running Gitea server manually is not practical, the ideal solution is to configure it to run on the
+system startup, to do so, you need to write a custom <em>Linux service</em> that starts Gitea every time the
+system boots up.</p>
+<p>Create a new <em>systemd service</em> and open it with your favorite editor, I will be using vim :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo vim /etc/systemd/system/gitea.service
+</code></pre></td></tr></table>
+</div>
+</div><p>Since Gitea saves data on MariaDB database, our custom service should be run after MariaDB service.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Gitea</span>
+<span class="na">After</span><span class="o">=</span><span class="s">syslog.target</span>
+<span class="na">After</span><span class="o">=</span><span class="s">network.target</span>
+<span class="na">Wants</span><span class="o">=</span><span class="s">mariadb.service</span>
+<span class="na">After</span><span class="o">=</span><span class="s">mariadb.service</span>
+
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+<span class="na">User</span><span class="o">=</span><span class="s">git</span>
+<span class="na">Group</span><span class="o">=</span><span class="s">git</span>
+<span class="na">WorkingDirectory</span><span class="o">=</span><span class="s">/var/lib/gitea/</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/local/bin/gitea web --config /etc/gitea/app.ini</span>
+<span class="na">Environment</span><span class="o">=</span><span class="s">USER=git HOME=/home/git GITEA_WORK_DIR=/var/lib/gitea</span>
+<span class="na">RestartSec</span><span class="o">=</span><span class="s">2s</span>
+<span class="na">Restart</span><span class="o">=</span><span class="s">always</span>
+
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Now you can enable and run Gitea service :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo systemctl daemon-reload
+sudo systemctl <span class="nb">enable</span> gitea --now
+</code></pre></td></tr></table>
+</div>
+</div><div class="details admonition success open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-check-circle fa-fw"></i>Congratulations!<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Now you have Gitea service running and enabled at system startup, try to reboot the VM and access
+Gitea server by visiting <a href="http://10.0.0.20:3000" target="_blank" rel="noopener noreffer">http://10.0.0.20:3000</a>, you should see the setup page for Gitea
+in a web UI.</div>
+        </div>
+    </div>
+<h2 id="firewall-configuration">Firewall configuration</h2>
+<p>If you are trying to deploy Gitea to a public server, then the usage of a firewall
+is recommended as a security measure. We will not dive in details into firewall
+configuration, but here are some basic commands to install and enable the firewall, and allow port
+3000 through the firewall <em>(the one that Gitea uses to serve the web UI)</em> :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt install -y ufw <span class="c1"># install uncomplicated firewall</span>
+sudo systemctl <span class="nb">enable</span> ufw --now <span class="c1"># enable and run firewall service</span>
+sudo ufw <span class="nb">enable</span> <span class="c1"># change firewall status to active</span>
+sudo ufw allow 22/tcp <span class="c1"># allow ssh</span>
+sudo ufw allow 3000/tcp <span class="c1"># allow Gitea</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="gitea-web-ui">Gitea web UI</h2>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Gitea configuration file<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">When you open Gitea web UI for the first time, you will be prompted with a
+configuration page, the web UI saves your configuration to <code>/etc/gitea/app.ini</code>,
+you can skip the settings page and set your configuration directly by editing
+the configuration file.</div>
+        </div>
+    </div>
+<p>Enter the database information that you previously created :</p>
+<figure><img src="/images/posts/002/gitea-initial-configuration.png"
+         alt="Gitea initial configuration"/><figcaption>
+            <h4>Gitea initial configuration</h4>
+        </figcaption>
+</figure>
+
+<p>You have also to setup Gitea general parameters :</p>
+<figure><img src="/images/posts/002/gitea-general-settings.png"
+         alt="Gitea general settings"/><figcaption>
+            <h4>Gitea general settings</h4>
+        </figcaption>
+</figure>
+
+<p>Set up the administrator account :</p>
+<figure><img src="/images/posts/002/gitea-administrator-account.png"
+         alt="Gitea administrator account"/><figcaption>
+            <h4>Gitea administrator account</h4>
+        </figcaption>
+</figure>
+
+<div class="details admonition success open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-check-circle fa-fw"></i>Congratulations!<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>Now you can hit <code>Install Gitea</code> to apply configuration, you will be redirected
+to the login page. Use your administrator account to get access to your Gitea
+instance.</p>
+<figure><img src="/images/posts/002/gitea-login.png"
+         alt="Gitea login page"/>
+</figure>
+</div>
+        </div>
+    </div>
+<h2 id="custom-configuration">Custom configuration</h2>
+<p>There are many configuration options than can be applied to you Gitea instance,
+let&rsquo;s assume that we are using Gitea in a team, and only the administrator can
+create accounts for new members.</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>Disable registration<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">How to prevent users from creating accounts on our Gitea instance ?</div>
+        </div>
+    </div>
+<p>The solution is pretty simple, you have to ssh into the Debian VM (or your physical
+server) and edit the <code>app.ini</code> configuration file. Under the <em>service</em> section,
+update <code>DISABLE_REGISTRATION</code> to <strong>true</strong>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[service]</span>
+<span class="na">REGISTER_EMAIL_CONFIRM</span>  <span class="o">=</span>  <span class="s">false</span>
+<span class="na">ENABLE_NOTIFY_EMAIL</span>     <span class="o">=</span>  <span class="s">false</span>
+<span class="na">DISABLE_REGISTRATION</span>	<span class="o">=</span>  <span class="s">true      &lt;---</span>
+<span class="na">...</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Restart Gitea service :</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo systemctl daemon-reload
+sudo systemctl restart gitea
+</code></pre></td></tr></table>
+</div>
+</div><p>Now the registration feature is disabled :</p>
+<figure><img src="/images/posts/002/gitea-registration-disabled.png"
+         alt="Gitea disabled registration"/><figcaption>
+            <h4>Gitea disabled registration</h4>
+        </figcaption>
+</figure>
+
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Advanced Gitea configuration<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">All available configuration options are listed in <a href="https://docs.gitea.io/en-us/config-cheat-sheet/" target="_blank" rel="noopener noreffer">Gitea configuration cheat sheet</a>.</div>
+        </div>
+    </div>
+<h2 id="summary">Summary</h2>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Gitea on a public server<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">If you are trying to deploy Gitea to a public server with a domain name, you can
+use <strong>NGINX reverse proxy</strong>. This will let you set up a domain name and also
+<strong>SSL/TLS certficates</strong>.</div>
+        </div>
+    </div>
+<p>In this tutorial, we set up a Debian VM with a bridged network connection, we
+created database configuration and we deployed Gitea. We also configured Gitea
+directly form the configuration file.</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-10-19</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/deploy-a-self-hosted-git-service/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service" data-hashtags="Git,Gitea,Debian"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-hashtag="Git"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service" data-web><i class="fab fa-whatsapp fa-fw"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service"><i data-svg-src="/lib/simple-icons/icons/line.min.svg"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service" data-image="/images/posts/002/featured.png"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="Share on Myspace" data-sharer="myspace" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service" data-description=""><i data-svg-src="/lib/simple-icons/icons/myspace.min.svg"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service" data-description=""><i class="fab fa-blogger fa-fw"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="https://ouailderghal.xyz/deploy-a-self-hosted-git-service/" data-title="Deploy a self-hosted Git service"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/git/">Git</a>,&nbsp;<a href="/tags/gitea/">Gitea</a>,&nbsp;<a href="/tags/debian/">Debian</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"></div>
+</div>
+<div id="comments"></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://dev.to/ouailderghal" target="_blank">Ouail Derghal</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.01a9044cb72aeb889854b4c442d03cc67db5dcfff848a5bba3c8df88e1ad3a04278cbda7603d1c97981d6759794e673f60aac6a54f53139bbdd044d4dfc2e475.css" integrity="sha512-AakETLcq64iYVLTEQtA8xn213P/4SKW7o8jfiOGtOgQnjL2nYD0cl5gdZ1l5Tmc/YKrGpU9TE5u90ETU38LkdQ=="><link rel="stylesheet" href="/lib/katex/copy-tex.min.cfee09198e00011c7d33435e1b23862f95b6827c243de4038963ca714516395c4f88715df65f4fd10a8a69988fbfed1b5a2aff27d588004581b91af98fc65a58.css" integrity="sha512-z&#43;4JGY4AARx9M0NeGyOGL5W2gnwkPeQDiWPKcUUWOVxPiHFd9l9P0QqKaZiPv&#43;0bWir/J9WIAEWBuRr5j8ZaWA=="><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.2d0f7b71a99aaff94e9624ff32a8dc42ce645a0cba433fdc091cf34735027efd1fa2db024c2f591d768f426255f17bbf3d500b7c967b0437b3979956dffa81c6.css" integrity="sha512-LQ97camar/lOliT/MqjcQs5kWgy6Qz/cCRzzRzUCfv0fotsCTC9ZHXaPQmJV8Xu/PVALfJZ7BDezl5lW3/qBxg=="><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.e9c0c2a48f70798908fc0c6e65ba47b80e8cd3961f0580a2fee3a84434d3af807a674e9447b49523af87a6a80642a32887c031eb5e1ded2af091bcd8e4bcd935.js" integrity="sha512-6cDCpI9weYkI/AxuZbpHuA6M05YfBYCi/uOoRDTTr4B6Z06UR7SVI6&#43;HpqgGQqMoh8Ax614d7SrwkbzY5LzZNQ=="></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.95377e01eea2e97083a9e6b4ae56c55a423a5b0cb7e6a298f06c004bbc318ff9a88e6687caa4c1c869aa278c33aae29bdb234b2cd85ae80acf7ad76b7ad61862.js" integrity="sha512-lTd&#43;Ae6i6XCDqea0rlbFWkI6Wwy35qKY8GwAS7wxj/mojmaHyqTByGmqJ4wzquKb2yNLLNha6ArPetdretYYYg=="></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.2f3927065dd8b4c5502378de4928a12f504d8f48944179bcd79308ea32ec392241f99bf097efa596897fddfccf08b249b434e1fddbcc00e79f76fb17d2c6820f.js" integrity="sha512-LzknBl3YtMVQI3jeSSihL1BNj0iUQXm815MI6jLsOSJB&#43;Zvwl&#43;&#43;llol/3fzPCLJJtDTh/dvMAOefdvsX0saCDw=="></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.4e60f014b860dd4038646d046f8308c93d4ed4c6fe3b0c399051b4b87a97b1d6f2673f4372f61084aa4680d91a98023a876946199ab65fc7ed389bc5fd78d352.js" integrity="sha512-TmDwFLhg3UA4ZG0Eb4MIyT1O1Mb&#43;Oww5kFG0uHqXsdbyZz9DcvYQhKpGgNkamAI6h2lGGZq2X8ftOJvF/XjTUg=="></script><script type="text/javascript" src="/lib/twemoji/twemoji.min.81aded0ba6eedebfe22caa897e638696523789a7007b47458b522e6eed8180129322031d88a9e4b6b0cf17a016150a18b80719db46ae6a7251735909f735db16.js" integrity="sha512-ga3tC6bu3r/iLKqJfmOGllI3iacAe0dFi1Iubu2BgBKTIgMdiKnktrDPF6AWFQoYuAcZ20auanJRc1kJ9zXbFg=="></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.843586ca1f88cb832bf401cecd43f6f98d2254f9ff070c716a84a57848c7fe2d68e0455317fb21d3f0354b28a2f0f58e69efae3ebf93fca1f0ca7a1e6d2b8087.js" integrity="sha512-hDWGyh&#43;Iy4Mr9AHOzUP2&#43;Y0iVPn/BwxxaoSleEjH/i1o4EVTF/sh0/A1Syii8PWOae&#43;uPr&#43;T/KHwynoebSuAhw=="></script><script type="text/javascript" src="/lib/sharer/sharer.min.c4c86aeb36b41ca1e3aad5e04e9297a121178682f01c799a25844b78c742d98fe914b37de07ce1f1ce0812385a2272654d39db5d80c9df7658de91e4a1987f26.js" integrity="sha512-xMhq6za0HKHjqtXgTpKXoSEXhoLwHHmaJYRLeMdC2Y/pFLN94Hzh8c4IEjhaInJlTTnbXYDJ33ZY3pHkoZh/Jg=="></script><script type="text/javascript" src="/lib/katex/katex.min.da4f96fb738686d777c219c6b77dde93fa00d4cfdaa81e8c8abf9621c0ab4ae202db20fa8935fa22e3dfe6ad681091904f4ea399ae4ae9c6bb5ea6f8bbb52ba3.js" integrity="sha512-2k&#43;W&#43;3OGhtd3whnGt33ek/oA1M/aqB6Mir&#43;WIcCrSuIC2yD6iTX6IuPf5q1oEJGQT06jma5K6ca7Xqb4u7Urow=="></script><script type="text/javascript" src="/lib/katex/auto-render.min.1a2706adb2c15c987691b17e0d80feb025b984f6afa0e7d500a48e13bfaa8180a05537307befc3e0b5de812f4955363bda8bdce549e0e059a5fa2d6e0f7b8ec9.js" integrity="sha512-GicGrbLBXJh2kbF&#43;DYD&#43;sCW5hPavoOfVAKSOE7&#43;qgYCgVTcwe&#43;/D4LXegS9JVTY72ovc5Ung4Fml&#43;i1uD3uOyQ=="></script><script type="text/javascript" src="/lib/katex/copy-tex.min.0c94f619ff73a2094558dbb180570c677ce2f516bd18f0f1a70f7ff24c90e9c8e2f9239a2e5575038f48b6ce7778b66519f6f85a3c110a9b4451d363bba5b183.js" integrity="sha512-DJT2Gf9zoglFWNuxgFcMZ3zi9Ra9GPDxpw9/8kyQ6cji&#43;SOaLlV1A49Its53eLZlGfb4WjwRCptEUdNju6Wxgw=="></script><script type="text/javascript" src="/lib/katex/mhchem.min.078b12bb78ac618a5abab7d2b665ec875c0bef5b3cc4a159c8d8c20ae507c3c7de0a1f519691b4df1f3e6b77a016267556e0a88fae3adc8635f159eb0c16cab8.js" integrity="sha512-B4sSu3isYYpaurfStmXsh1wL71s8xKFZyNjCCuUHw8feCh9RlpG03x8&#43;a3egFiZ1VuCoj6463IY18VnrDBbKuA=="></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.c975ea3858dd8c7347d46343fb510ed236efbde6c0069cc6283eba7639d47e22a560c1391c6314247a0269e1380f93d31b662c4897fa770ab2514bd0bd2d2f68.js" integrity="sha512-yXXqOFjdjHNH1GND&#43;1EO0jbvvebABpzGKD66djnUfiKlYME5HGMUJHoCaeE4D5PTG2YsSJf6dwqyUUvQvS0vaA=="></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"This website uses Cookies to improve your experience."},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"algoliaAppID":"J0915QSLMH","algoliaIndex":"blog","algoliaSearchKey":"b18ed0902f97b06d7576359d6ce285a7","highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"algolia"},"twemoji":true};</script><script type="text/javascript" src="/js/theme.min.69ac882c686e101963f9cd3dc6167cee800004e4e9f40dae6f6fbeb3b03fb81ead782f98cc6e6eeec42b70a1b7047c7902e8f0ba3171660e2c2dc59d62965c7a.js" integrity="sha512-aayILGhuEBlj&#43;c09xhZ87oAABOTp9A2ub2&#43;&#43;s7A/uB6teC&#43;YzG5u7sQrcKG3BHx5AujwujFxZg4sLcWdYpZceg=="></script></body>
+</html>
